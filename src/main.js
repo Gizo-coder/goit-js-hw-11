@@ -30,11 +30,34 @@ form.addEventListener('submit', e => {
                 
                 });
 
+                loader.classList.add('is-hidden');
+
                 return;
             }
 
             gallery.innerHTML = createImageCards(data.hits);
             lightbox.refresh();
+
+            const images = gallery.querySelectorAll('img');
+            let loadedCount = 0;
+
+            images.forEach(img => {
+                img.addEventListener('load', () => {
+                    loadedCount++;
+                    if (loadedCount === images.length) {
+                     loader.classList.add('is-hidden');
+                    }
+                });
+
+                img.addEventListener('error', () => {
+                    loadedCount++;
+                    if (loadedCount === images.length) {
+                     loader.classList.add('is-hidden');
+                    }
+                });
+             });
+
+
 
         })
         .catch(err => {
@@ -45,9 +68,7 @@ form.addEventListener('submit', e => {
                 position: 'topRight',
             });
         })
-        .finally(() => {
-            loader.classList.add('is-hidden');
-        });
+        
 });
 
 
